@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex justify-center items-center flex-col md:flex-row bg-gray px-5 md:px-0">
+  <div class="flex justify-center items-center flex-col md:flex-row px-5 md:px-0 pt-10">
     <form
         class="w-full xl:w-1/3 md:w-1/2 rounded-xl shadow-md bg-white py-6 sm:py-8 px-5 sm:px-12"
         @submit.prevent="onSubmit"
@@ -17,7 +17,7 @@
         </label>
         <select
             id="country"
-            class="select duration-200 shadow rounded-md py-2 border-2 border-primary-color px-4 focus:outline-none"
+            class="duration-200 shadow rounded-md py-2 border-2 border-primary-color px-4 focus:outline-none"
             value="Country"
             v-model="payload.countryId"
         >
@@ -40,7 +40,7 @@
         </label>
         <select
             id="user"
-            class="select duration-200 shadow rounded-md py-2 border-2 border-primary-color px-4 focus:outline-none"
+            class="duration-200 shadow rounded-md py-2 border-2 border-primary-color px-4 focus:outline-none"
             value="User"
             v-model="payload.userId"
         >
