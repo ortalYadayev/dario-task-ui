@@ -13,8 +13,6 @@ const store = createStore({
           .reduce((queryArr, [key, value]) => [...queryArr, `${key}=${value}`], [])
           .join('&')
 
-          console.log(query)
-
         return axiosInstance.get(`/logs?${query}`);
       },
 

@@ -19,9 +19,9 @@
             id="country"
             class="duration-200 shadow rounded-md py-2 border-2 border-primary-color px-4 focus:outline-none"
             value="Country"
-            v-model="payload.countryId"
+            @change="$emit('update:countryId', $event.target.value)"
         >
-          <option value="" selected>choose country</option>
+          <option value="" selected> choose country </option>
           <option
               v-for="(country) in countries"
               :key="country.id"
@@ -41,10 +41,10 @@
         <select
             id="user"
             class="duration-200 shadow rounded-md py-2 border-2 border-primary-color px-4 focus:outline-none"
-            value="User"
-            v-model="payload.userId"
+            value="`User`"
+            @change="$emit('update:userId', $event.target.value)"
         >
-          <option value="" selected>choose user</option>
+          <option value="" selected> choose user </option>
           <option
               v-for="user in users"
               :key="user.id"
@@ -61,18 +61,16 @@
             class="duration-200 border-b-2 borderprimary-color bg-transparent  px-3 pb-1.5"
             :class="errors.message ? 'border-red-500' : 'border-primary-color hover:border-primary-color focus:border-primary-color'"
             placeholder="Start Date"
-            v-model="payload.dateFrom"
-            @input="resetError('message')"
+            @input="$emit('update:dateFrom', $event.target.value); resetError('message')"
         >
         <input
             type="date"
             class="duration-200 border-b-2 border-primary-color bg-transparent px-3 pb-1.5"
-            :class="payload.dateFrom === null ? 'cursor-not-allowed': '', errors.message ? 'border-red-500' : 'border-primary-color hover:border-primary-color focus:border-primary-color'"
+            :class="dateFrom === null ? 'cursor-not-allowed': '', errors.message ? 'border-red-500' : 'border-primary-color hover:border-primary-color focus:border-primary-color'"
             placeholder="Start Date"
-            v-model="payload.dateTo"
-            @input="resetError('message')"
-            :disabled="payload.dateFrom === null"
-            :min="payload.dateFrom"
+            @input="$emit('update:dateTo', $event.target.value); resetError('message')"
+            :disabled="dateFrom === null"
+            :min="dateFrom"
         >
 
         <transition name="slide-fade">
@@ -100,48 +98,58 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 
 const store = useStore();
-
-const errors = ref({});
-const logs = ref({});
+const props = defineProps({
+  countryId: {
+    required: false,
+    type: [Number, null],
+  },
+  userId: {
+    required: false,
+    type: [Number, null],
+  },
+  dateFrom: {
+    required: true,
+    type: String,
+  },
+  dateTo: {
+    required: true,
+    type: String,
+  },
+  errors: {
+    required: true,
+  }
+});
+const emits = defineEmits([
+  'onSubmit',
+  'update:countryId',
+  'update:userId',
+  'update:dateFrom',
+  'update:dateTo',
+]);
 const users = ref({});
 const countries = ref({});
-const payload = reactive({
-  countryId: '',
-  userId: '',
-  dateFrom: null,
-  dateTo: null,
-});
 
-getUsersAndCountries();
+setTimeout(() => {
+  getUsersAndCountries();
+})
 
 async function getUsersAndCountries() {
-  const responseUsers = await store.dispatch('getUsers', payload);
-  const responseCountries = await store.dispatch('getCountries', payload);
+  const responseUsers = await store.dispatch('getUsers');
+  const responseCountries = await store.dispatch('getCountries');
 
   users.value = responseUsers.data
   countries.value = responseCountries.data
 }
 
 async function onSubmit() {
-  console.log(payload)
-  try {
-    const response = await store.dispatch('getLogs', payload);
-
-    logs.value = response.data
-  } catch (error) {
-    if (error.response.status === 422) {
-      errors.value = {
-        message: 'Dates are required'
-      }
-    }
-  }
+  emits('onSubmit');
 }
 
 function resetError(key) {
-  delete errors.value[key];
+  delete props.errors[key];
 }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
-  <div class="flex justify-center mt-10 mx-4 pb-10">
-    <table class="w-1/2 table-auto w-full bg-white shadow-lg text-center rounded-lg">
+  <div class="flex justify-center  mt-10 mx-4 pb-10">
+    <table v-if="logs.length" class="w-1/2 table-auto w-full bg-white shadow-lg text-center rounded-lg">
       <thead class="text-white">
         <tr class="bg-primary-color table-row sm:rounded-none">
           <th class="rounded-tl-lg p-3 sm:w-10">
@@ -16,15 +16,15 @@
       </thead>
 
       <tbody class="flex-1 sm:flex-none">
-        <tr>
+        <tr v-for="(log, index) in logs" :key="index">
           <td class="border-gray border-t border-l hover:bg-gray p-3">
-          1
+          {{ log.creationDate }}
           </td>
           <td class="border-gray border-t border-l hover:bg-gray p-3">
-           2
+           {{ log.successfullySent }}
           </td>
           <td class="border-gray border-t border-l hover:bg-gray p-3">
-            3
+            {{ log.failed }}
           </td>
         </tr>
       </tbody>
@@ -32,10 +32,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "TableLogs"
-}
+<script setup>
+const props = defineProps({
+  logs: {
+    required: false,
+    type: [Array, null],
+  }
+});
 </script>
 
 <style scoped>
