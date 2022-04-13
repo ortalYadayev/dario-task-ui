@@ -1,11 +1,31 @@
-// store/index.js
 import { createStore } from 'vuex'
-import stack from './modules/stack'
+import axiosInstance from "../_helpers/axios";
 
 const store = createStore({
-    modules: {
-        stack,
+    state: {
+
     },
+    getters: {},
+    mutations: {},
+    actions: {
+      getLogs({ commit }, queryObj = { dateFrom: '', dateTo: '', countryId: '', userId: '' }) {
+          const query = Object.entries(queryObj)
+          .reduce((queryArr, [key, value]) => [...queryArr, `${key}=${value}`], [])
+          .join('&')
+
+          console.log(query)
+
+        return axiosInstance.get(`/logs?${query}`);
+      },
+
+      getUsers() {
+          return axiosInstance.get(`/users`);
+      },
+
+      getCountries() {
+          return axiosInstance.get(`/countries`);
+      }
+    }
 })
 
 export default store

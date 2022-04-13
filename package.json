@@ -10,6 +10,7 @@
         "format": "prettier --config .prettierrc '**/*.(js|json|md)' --write"
     },
     "dependencies": {
+        "axios": "^0.26.1",
         "vue": "^3.2.16",
         "vue-router": "^4.0.11",
         "vuex": "^4.0.2"
