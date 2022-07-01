@@ -1,4 +1,4 @@
-# Task Dario - UI
+# Dario Task - UI
 
 ## Install
 
